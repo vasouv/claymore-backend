@@ -2,6 +2,7 @@ package vs.claymorebackend;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.collections.api.block.predicate.Predicate;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.list.mutable.FastList;
@@ -48,5 +49,23 @@ public class ClaymoreService {
     public ImmutableList<Claymore> noSymbol() {
         MutableList<Claymore> list = FastList.newList(this.claymores);
         return list.select(claymore -> claymore.symbol == null).toImmutable();
+    }
+
+    public ImmutableList<Claymore> killedNorthernCampaign() {
+        MutableList<Claymore> list = FastList.newList(this.claymores);
+        return list.select(claymore -> claymore.generation.contains("Clare")).select(claymore -> claymore.fate.contains("Dead (Killed in the Northern Campaign)")).toImmutable();
+    }
+
+    public ImmutableList<Claymore> deadAwakened() {
+        MutableList<Claymore> list = FastList.newList(this.claymores);
+
+        Predicate<Claymore> deadAwakened = claymore -> claymore.fate.contains("Dead") && claymore.fate.contains("Awakened");
+
+        return list.reject(claymore -> claymore.fate.equals("Alive")).select(deadAwakened).toImmutable();
+    }
+
+    public ImmutableList<String> distinctGenerations() {
+        MutableList<Claymore> list = FastList.newList(this.claymores);
+        return list.flatCollect(claymore -> claymore.generation).distinct().toImmutable();
     }
 }

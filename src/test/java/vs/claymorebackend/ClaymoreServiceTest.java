@@ -1,10 +1,16 @@
 package vs.claymorebackend;
 
 import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.set.ImmutableSet;
+import org.eclipse.collections.impl.list.mutable.FastList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +38,6 @@ public class ClaymoreServiceTest {
         ImmutableList<Claymore> claymores = service.noSymbol();
 
         for (Claymore claymore : claymores) {
-            System.out.println(claymore);
             assertThat(claymore.symbol).isNull();
         }
 
@@ -41,13 +46,22 @@ public class ClaymoreServiceTest {
     @Test
     @DisplayName("Find all Claymores killed in the Northern Campaign")
     public void killedInNorthernCampaign() {
-        fail();
+        ImmutableList<Claymore> claymores = service.killedNorthernCampaign();
+
+        for (Claymore claymore : claymores) {
+            assertThat(claymore.generation).containsExactly("Clare");
+            assertThat(claymore.fate).isEqualTo("Dead (Killed in the Northern Campaign)");
+        }
     }
 
     @Test
     @DisplayName("Find all Dead/Awakened Claymores")
     public void deadAwakened() {
-        fail();
+        ImmutableList<Claymore> claymores = service.deadAwakened();
+
+        for (Claymore claymore : claymores) {
+            assertThat(claymore.fate).contains(Arrays.asList("Dead", "Awakened"));
+        }
     }
 
     @Test
@@ -77,6 +91,8 @@ public class ClaymoreServiceTest {
     @Test
     @DisplayName("Find the distinct generations for all Claymores")
     public void distinctGenerations() {
-        fail();
+        ImmutableList<String> generations = service.distinctGenerations();
+        assertThat(generations).containsExactlyInAnyOrder("Clare", "Teresa", "Clarice");
     }
+
 }
