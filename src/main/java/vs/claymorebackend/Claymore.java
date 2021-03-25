@@ -1,12 +1,7 @@
 package vs.claymorebackend;
 
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 import java.util.List;
 
-@ToString
-@NoArgsConstructor
 public class Claymore {
 
     public String id;
