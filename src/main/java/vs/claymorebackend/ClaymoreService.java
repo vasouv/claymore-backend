@@ -21,59 +21,59 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ClaymoreService {
 
-    @Autowired
-    ResourceLoader resourceLoader;
+  @Autowired ResourceLoader resourceLoader;
 
-    private List<Claymore> claymores;
+  private List<Claymore> claymores;
 
-    @PostConstruct
-    public void init() throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:claymore.json");
-        InputStream inputStream = resource.getInputStream();
-        String contents = new BufferedReader(new InputStreamReader(inputStream)).lines()
-                .collect(Collectors.joining("\n"));
-        claymores = new ObjectMapper().readValue(contents, new TypeReference<List<Claymore>>() {
+  @PostConstruct
+  public void init() throws IOException {
+    Resource resource = resourceLoader.getResource("classpath:claymore.json");
+    InputStream inputStream = resource.getInputStream();
+    String contents =
+        new BufferedReader(new InputStreamReader(inputStream))
+            .lines()
+            .collect(Collectors.joining("\n"));
+    claymores = new ObjectMapper().readValue(contents, new TypeReference<List<Claymore>>() {});
+  }
 
-        });
-    }
+  public List<Claymore> findAll() {
+    return claymores;
+  }
 
-    public List<Claymore> findAll() {
-        return claymores;
-    }
+  public Claymore findByID(String id) {
+    return claymores.stream().filter(claymore -> claymore.id.equals(id)).findFirst().get();
+  }
 
-    public Claymore findByID(String id) {
-        return claymores.stream().filter(claymore -> claymore.id.equals(id)).findFirst().get();
-    }
+  public ImmutableList<Claymore> noEpitaph() {
+    MutableList<Claymore> list = FastList.newList(this.claymores);
+    return list.select(claymore -> claymore.epitaph.equals("None")).toImmutable();
+  }
 
-    public ImmutableList<Claymore> noEpitaph() {
-        MutableList<Claymore> list = FastList.newList(this.claymores);
-        return list.select(claymore -> claymore.epitaph.equals("None")).toImmutable();
-    }
+  public ImmutableList<Claymore> noSymbol() {
+    MutableList<Claymore> list = FastList.newList(this.claymores);
+    return list.select(claymore -> claymore.symbol == null).toImmutable();
+  }
 
-    public ImmutableList<Claymore> noSymbol() {
-        MutableList<Claymore> list = FastList.newList(this.claymores);
-        return list.select(claymore -> claymore.symbol == null).toImmutable();
-    }
+  public ImmutableList<Claymore> killedNorthernCampaign() {
+    MutableList<Claymore> list = FastList.newList(this.claymores);
+    return list.select(claymore -> claymore.generation.contains("Clare"))
+        .select(claymore -> claymore.fate.contains("Dead (Killed in the Northern Campaign)"))
+        .toImmutable();
+  }
 
-    public ImmutableList<Claymore> killedNorthernCampaign() {
-        MutableList<Claymore> list = FastList.newList(this.claymores);
-        return list.select(claymore -> claymore.generation.contains("Clare")).select(
-                claymore -> claymore.fate.contains("Dead (Killed in the Northern Campaign)"))
-                .toImmutable();
-    }
+  public ImmutableList<Claymore> deadAwakened() {
+    MutableList<Claymore> list = FastList.newList(this.claymores);
 
-    public ImmutableList<Claymore> deadAwakened() {
-        MutableList<Claymore> list = FastList.newList(this.claymores);
+    Predicate<Claymore> deadAwakened =
+        claymore -> claymore.fate.contains("Dead") && claymore.fate.contains("Awakened");
 
-        Predicate<Claymore> deadAwakened =
-                claymore -> claymore.fate.contains("Dead") && claymore.fate.contains("Awakened");
+    return list.reject(claymore -> claymore.fate.equals("Alive"))
+        .select(deadAwakened)
+        .toImmutable();
+  }
 
-        return list.reject(claymore -> claymore.fate.equals("Alive")).select(deadAwakened)
-                .toImmutable();
-    }
-
-    public ImmutableList<String> distinctGenerations() {
-        MutableList<Claymore> list = FastList.newList(this.claymores);
-        return list.flatCollect(claymore -> claymore.generation).distinct().toImmutable();
-    }
+  public ImmutableList<String> distinctGenerations() {
+    MutableList<Claymore> list = FastList.newList(this.claymores);
+    return list.flatCollect(claymore -> claymore.generation).distinct().toImmutable();
+  }
 }

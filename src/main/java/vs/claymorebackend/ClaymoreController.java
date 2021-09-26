@@ -12,17 +12,15 @@ import java.util.List;
 @RequestMapping("claymore")
 public class ClaymoreController {
 
-    @Autowired
-    private ClaymoreService service;
+  @Autowired private ClaymoreService service;
 
-    @GetMapping
-    public List<Claymore> findAll() {
-        return service.findAll();
-    }
+  @GetMapping
+  public List<Claymore> findAll() {
+    return service.findAll();
+  }
 
-    @GetMapping("{name}")
-    public Claymore findByName(@PathVariable String name) {
-        return service.findByID(name);
-    }
-
+  @GetMapping("{name}")
+  public Claymore findByName(@PathVariable String name) {
+    return service.findByID(name);
+  }
 }
