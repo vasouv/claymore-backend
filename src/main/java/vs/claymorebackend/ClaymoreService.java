@@ -10,8 +10,10 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.eclipse.collections.api.block.predicate.Predicate;
+import org.eclipse.collections.api.factory.Maps;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.map.ImmutableMap;
 import org.eclipse.collections.impl.list.mutable.FastList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -84,5 +86,16 @@ public class ClaymoreService {
     MutableList<Claymore> list = FastList.newList(this.claymores);
 
     return (int) list.sumOfInt(claymore -> claymore.rank);
+  }
+
+  public ImmutableMap<String, Integer> countClaymoresByGeneration() {
+    MutableList<Claymore> list = FastList.newList(this.claymores);
+    int clare =
+        (int) list.stream().filter(claymore -> claymore.generation.contains("Clare")).count();
+    int teresa =
+        (int) list.stream().filter(claymore -> claymore.generation.contains("Teresa")).count();
+    int clarice =
+        (int) list.stream().filter(claymore -> claymore.generation.contains("Clarice")).count();
+    return Maps.immutable.of("Clare", clare, "Teresa", teresa, "Clarice", clarice);
   }
 }

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.Arrays;
 
 import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.map.ImmutableMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,15 +59,14 @@ public class ClaymoreServiceTest {
   }
 
   @Test
-  @DisplayName("Order by rank")
-  public void orderByRank() {
-    fail();
-  }
-
-  @Test
   @DisplayName("Count all Claymores by generation")
   public void countByGeneration() {
-    fail();
+    ImmutableMap<String, Integer> countMap = service.countClaymoresByGeneration();
+    assertThat(countMap.keysView()).containsExactlyInAnyOrder("Clare", "Teresa", "Clarice");
+    assertThat(countMap.get("Clare")).isEqualTo(31);
+    assertThat(countMap.get("Teresa")).isEqualTo(6);
+    assertThat(countMap.get("Clarice")).isEqualTo(21);
+    fail("Needs more work");
   }
 
   @Test
