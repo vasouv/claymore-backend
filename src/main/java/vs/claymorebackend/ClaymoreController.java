@@ -16,12 +16,12 @@ public class ClaymoreController {
     private ClaymoreService service;
 
     @GetMapping
-    public List<Claymore> findAll(){
+    public List<Claymore> findAll() {
         return service.findAll();
     }
 
     @GetMapping("{name}")
-    public Claymore findByName(@PathVariable String name){
+    public Claymore findByName(@PathVariable String name) {
         return service.findByID(name);
     }
 

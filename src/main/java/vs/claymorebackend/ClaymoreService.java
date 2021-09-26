@@ -30,9 +30,10 @@ public class ClaymoreService {
     public void init() throws IOException {
         Resource resource = resourceLoader.getResource("classpath:claymore.json");
         InputStream inputStream = resource.getInputStream();
-        String contents = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+        String contents = new BufferedReader(new InputStreamReader(inputStream)).lines()
+                .collect(Collectors.joining("\n"));
         claymores = new ObjectMapper().readValue(contents, new TypeReference<List<Claymore>>() {
-            
+
         });
     }
 
@@ -56,15 +57,19 @@ public class ClaymoreService {
 
     public ImmutableList<Claymore> killedNorthernCampaign() {
         MutableList<Claymore> list = FastList.newList(this.claymores);
-        return list.select(claymore -> claymore.generation.contains("Clare")).select(claymore -> claymore.fate.contains("Dead (Killed in the Northern Campaign)")).toImmutable();
+        return list.select(claymore -> claymore.generation.contains("Clare")).select(
+                claymore -> claymore.fate.contains("Dead (Killed in the Northern Campaign)"))
+                .toImmutable();
     }
 
     public ImmutableList<Claymore> deadAwakened() {
         MutableList<Claymore> list = FastList.newList(this.claymores);
 
-        Predicate<Claymore> deadAwakened = claymore -> claymore.fate.contains("Dead") && claymore.fate.contains("Awakened");
+        Predicate<Claymore> deadAwakened =
+                claymore -> claymore.fate.contains("Dead") && claymore.fate.contains("Awakened");
 
-        return list.reject(claymore -> claymore.fate.equals("Alive")).select(deadAwakened).toImmutable();
+        return list.reject(claymore -> claymore.fate.equals("Alive")).select(deadAwakened)
+                .toImmutable();
     }
 
     public ImmutableList<String> distinctGenerations() {
