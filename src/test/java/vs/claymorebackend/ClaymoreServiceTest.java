@@ -2,7 +2,9 @@ package vs.claymorebackend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.Arrays;
+
 import org.eclipse.collections.api.list.ImmutableList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -76,7 +78,8 @@ public class ClaymoreServiceTest {
   @Test
   @DisplayName("Find the sum of ranks in all generations")
   public void sumOfAllRanksAllGenerations() {
-    fail();
+    int sum = service.sumOfAllRanksAllGenerations();
+    assertThat(sum).isEqualTo(961);
   }
 
   @Test

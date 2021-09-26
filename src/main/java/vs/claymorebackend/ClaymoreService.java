@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
+
 import org.eclipse.collections.api.block.predicate.Predicate;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -75,5 +78,11 @@ public class ClaymoreService {
   public ImmutableList<String> distinctGenerations() {
     MutableList<Claymore> list = FastList.newList(this.claymores);
     return list.flatCollect(claymore -> claymore.generation).distinct().toImmutable();
+  }
+
+  public int sumOfAllRanksAllGenerations() {
+    MutableList<Claymore> list = FastList.newList(this.claymores);
+
+    return (int) list.sumOfInt(claymore -> claymore.rank);
   }
 }
