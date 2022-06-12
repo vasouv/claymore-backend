@@ -23,7 +23,7 @@ public class ClaymoreServiceTest {
     ImmutableList<Claymore> claymores = service.noEpitaph();
 
     for (Claymore claymore : claymores) {
-      assertThat(claymore.epitaph).isEqualTo("None");
+      assertThat(claymore.epitaph()).isEqualTo("None");
     }
   }
 
@@ -33,7 +33,7 @@ public class ClaymoreServiceTest {
     ImmutableList<Claymore> claymores = service.noSymbol();
 
     for (Claymore claymore : claymores) {
-      assertThat(claymore.symbol).isNull();
+      assertThat(claymore.symbol()).isNull();
     }
   }
 
@@ -43,8 +43,8 @@ public class ClaymoreServiceTest {
     ImmutableList<Claymore> claymores = service.killedNorthernCampaign();
 
     for (Claymore claymore : claymores) {
-      assertThat(claymore.generation).containsExactly("Clare");
-      assertThat(claymore.fate).isEqualTo("Dead (Killed in the Northern Campaign)");
+      assertThat(claymore.generation()).containsExactly("Clare");
+      assertThat(claymore.fate()).isEqualTo("Dead (Killed in the Northern Campaign)");
     }
   }
 
@@ -54,7 +54,7 @@ public class ClaymoreServiceTest {
     ImmutableList<Claymore> claymores = service.deadAwakened();
 
     for (Claymore claymore : claymores) {
-      assertThat(claymore.fate).contains(Arrays.asList("Dead", "Awakened"));
+      assertThat(claymore.fate()).contains(Arrays.asList("Dead", "Awakened"));
     }
   }
 

@@ -46,23 +46,23 @@ public class ClaymoreService {
   }
 
   public Claymore findByID(String id) {
-    return claymores.stream().filter(claymore -> claymore.id.equals(id)).findFirst().get();
+    return claymores.stream().filter(claymore -> claymore.id().equals(id)).findFirst().get();
   }
 
   public ImmutableList<Claymore> noEpitaph() {
     MutableList<Claymore> list = FastList.newList(this.claymores);
-    return list.select(claymore -> claymore.epitaph.equals("None")).toImmutable();
+    return list.select(claymore -> claymore.epitaph().equals("None")).toImmutable();
   }
 
   public ImmutableList<Claymore> noSymbol() {
     MutableList<Claymore> list = FastList.newList(this.claymores);
-    return list.select(claymore -> claymore.symbol == null).toImmutable();
+    return list.select(claymore -> claymore.symbol() == null).toImmutable();
   }
 
   public ImmutableList<Claymore> killedNorthernCampaign() {
     MutableList<Claymore> list = FastList.newList(this.claymores);
-    return list.select(claymore -> claymore.generation.contains("Clare"))
-        .select(claymore -> claymore.fate.contains("Dead (Killed in the Northern Campaign)"))
+    return list.select(claymore -> claymore.generation().contains("Clare"))
+        .select(claymore -> claymore.fate().contains("Dead (Killed in the Northern Campaign)"))
         .toImmutable();
   }
 
@@ -70,32 +70,32 @@ public class ClaymoreService {
     MutableList<Claymore> list = FastList.newList(this.claymores);
 
     Predicate<Claymore> deadAwakened =
-        claymore -> claymore.fate.contains("Dead") && claymore.fate.contains("Awakened");
+        claymore -> claymore.fate().contains("Dead") && claymore.fate().contains("Awakened");
 
-    return list.reject(claymore -> claymore.fate.equals("Alive"))
+    return list.reject(claymore -> claymore.fate().equals("Alive"))
         .select(deadAwakened)
         .toImmutable();
   }
 
   public ImmutableList<String> distinctGenerations() {
     MutableList<Claymore> list = FastList.newList(this.claymores);
-    return list.flatCollect(claymore -> claymore.generation).distinct().toImmutable();
+    return list.flatCollect(claymore -> claymore.generation()).distinct().toImmutable();
   }
 
   public int sumOfAllRanksAllGenerations() {
     MutableList<Claymore> list = FastList.newList(this.claymores);
 
-    return (int) list.sumOfInt(claymore -> claymore.rank);
+    return (int) list.sumOfInt(claymore -> claymore.rank());
   }
 
   public ImmutableMap<String, Integer> countClaymoresByGeneration() {
     MutableList<Claymore> list = FastList.newList(this.claymores);
     int clare =
-        (int) list.stream().filter(claymore -> claymore.generation.contains("Clare")).count();
+        (int) list.stream().filter(claymore -> claymore.generation().contains("Clare")).count();
     int teresa =
-        (int) list.stream().filter(claymore -> claymore.generation.contains("Teresa")).count();
+        (int) list.stream().filter(claymore -> claymore.generation().contains("Teresa")).count();
     int clarice =
-        (int) list.stream().filter(claymore -> claymore.generation.contains("Clarice")).count();
+        (int) list.stream().filter(claymore -> claymore.generation().contains("Clarice")).count();
     return Maps.immutable.of("Clare", clare, "Teresa", teresa, "Clarice", clarice);
   }
 }
